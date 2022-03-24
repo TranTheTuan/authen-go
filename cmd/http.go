@@ -17,6 +17,7 @@ import (
 
 	"authen-go/app/domain/service"
 	"authen-go/app/domain/usecase"
+	"authen-go/app/infrastructure/casbin"
 	httpHandler "authen-go/app/infrastructure/http"
 	"authen-go/app/infrastructure/pubsub"
 	"authen-go/app/infrastructure/repository"
@@ -52,6 +53,7 @@ func runServeHTTPCmd(cmd *cobra.Command, args []string) {
 	sqlDB.SetConnMaxLifetime(200 * time.Minute)
 
 	go func() {
+		casbin.InitFromSQLLite(orm, "")
 		pubsub.InitPubSub(orm)
 
 		userRepo := repository.NewUserRepository(orm)
