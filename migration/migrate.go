@@ -11,6 +11,10 @@ func Migrate(db *gorm.DB) error {
 			ID:      "2021122816360",
 			Migrate: migrationVersion2021122816360,
 		},
+		{
+			ID:      "2022032316040",
+			Migrate: migrationVersion2022032316040,
+		},
 	})
 
 	return m.Migrate()

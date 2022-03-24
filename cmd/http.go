@@ -14,6 +14,12 @@ import (
 	"github.com/spf13/viper"
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
+
+	"authen-go/app/domain/service"
+	"authen-go/app/domain/usecase"
+	httpHandler "authen-go/app/infrastructure/http"
+	"authen-go/app/infrastructure/pubsub"
+	"authen-go/app/infrastructure/repository"
 )
 
 var httpCmd = &cobra.Command{
@@ -46,11 +52,20 @@ func runServeHTTPCmd(cmd *cobra.Command, args []string) {
 	sqlDB.SetConnMaxLifetime(200 * time.Minute)
 
 	go func() {
-		router := mux.NewRouter().PathPrefix("/auth/").Subrouter()
-		router.HandleFunc("/login", func(w http.ResponseWriter, r *http.Request) {}).Methods("POST")
+		pubsub.InitPubSub(orm)
+
+		userRepo := repository.NewUserRepository(orm)
+		userService := service.NewUserService(userRepo)
+		userUsecase := usecase.NewUserUsecase(userService)
+		authHandler := httpHandler.NewAuthHandler(userUsecase)
+
+		router := mux.NewRouter().PathPrefix("/v1/auth/").Subrouter()
+		router.Use(pubsub.EventDispatcherMiddleware)
+		router.HandleFunc("/login", authHandler.Login).Methods("POST")
+		router.HandleFunc("/register", authHandler.Register).Methods("POST")
 
 		httpMux := http.NewServeMux()
-		httpMux.Handle("/auth/", router)
+		httpMux.Handle("/v1/auth/", router)
 
 		httpHandler := cors.AllowAll().Handler(httpMux)
 

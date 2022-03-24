@@ -42,6 +42,9 @@ func init() {
 	rootCmd.PersistentFlags().StringVar(&cfgFile, "config", "", "config file (default is $HOME/.bm.yaml)")
 	initConfiguration()
 
+	rootCmd.AddCommand(serveCmd)
+	rootCmd.AddCommand(migrationCmd)
+
 	rootCmd.Flags().BoolP("toggle", "t", false, "Help message for toggle")
 }
 
@@ -73,8 +76,8 @@ func initConfig() {
 
 func initConfiguration() {
 	rootCmd.PersistentFlags().String(MySQLUserName, "root", "mysql username")
-	rootCmd.PersistentFlags().String(MySQLPassword, "admin123", "mysql password")
-	rootCmd.PersistentFlags().String(MySQLDatabase, "polar_bear", "mysql database name")
+	rootCmd.PersistentFlags().String(MySQLPassword, "", "mysql password")
+	rootCmd.PersistentFlags().String(MySQLDatabase, "authentication", "mysql database name")
 	rootCmd.PersistentFlags().String(MySQLHost, "127.0.0.1", "mysql host")
 	rootCmd.PersistentFlags().String(MySQLPort, "3306", "mysql port")
 	rootCmd.PersistentFlags().String(MySQLCharset, "utf8mb4", "mysql default database character set. Recommend utf8mb4 for better Unicode support")
@@ -86,13 +89,13 @@ func initConfiguration() {
 	_ = viper.BindPFlag("system-mode", rootCmd.PersistentFlags().Lookup("system-mode"))
 	_ = viper.BindPFlag("system-gorm-log-mode", rootCmd.PersistentFlags().Lookup("system-gorm-log-mode"))
 
-	_ = viper.BindPFlag("system-mysql-username", rootCmd.PersistentFlags().Lookup("system-mysql-username"))
-	_ = viper.BindPFlag("system-mysql-password", rootCmd.PersistentFlags().Lookup("system-mysql-password"))
-	_ = viper.BindPFlag("system-mysql-database", rootCmd.PersistentFlags().Lookup("system-mysql-database"))
-	_ = viper.BindPFlag("system-mysql-host", rootCmd.PersistentFlags().Lookup("system-mysql-host"))
-	_ = viper.BindPFlag("system-mysql-port", rootCmd.PersistentFlags().Lookup("system-mysql-port"))
-	_ = viper.BindPFlag("system-mysql-charset", rootCmd.PersistentFlags().Lookup("system-mysql-charset"))
-	_ = viper.BindPFlag("system-mysql-loc", rootCmd.PersistentFlags().Lookup("system-mysql-loc"))
+	_ = viper.BindPFlag(MySQLUserName, rootCmd.PersistentFlags().Lookup("system-mysql-username"))
+	_ = viper.BindPFlag(MySQLPassword, rootCmd.PersistentFlags().Lookup("system-mysql-password"))
+	_ = viper.BindPFlag(MySQLDatabase, rootCmd.PersistentFlags().Lookup("system-mysql-database"))
+	_ = viper.BindPFlag(MySQLHost, rootCmd.PersistentFlags().Lookup("system-mysql-host"))
+	_ = viper.BindPFlag(MySQLPort, rootCmd.PersistentFlags().Lookup("system-mysql-port"))
+	_ = viper.BindPFlag(MySQLCharset, rootCmd.PersistentFlags().Lookup("system-mysql-charset"))
+	_ = viper.BindPFlag(MySQLLoc, rootCmd.PersistentFlags().Lookup("system-mysql-loc"))
 	_ = viper.BindPFlag(MySQLMaxOpenConnections, rootCmd.PersistentFlags().Lookup(MySQLMaxOpenConnections))
 	_ = viper.BindPFlag(MySQLMaxIdleConnections, rootCmd.PersistentFlags().Lookup(MySQLMaxIdleConnections))
 }

@@ -11,7 +11,7 @@ var serveCmd = &cobra.Command{
 }
 
 func init() {
-	rootCmd.AddCommand(serveCmd)
+	serveCmd.AddCommand(httpCmd)
 }
 
 func runServeCmd(cmd *cobra.Command, args []string) {

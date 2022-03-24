@@ -3,12 +3,16 @@ module authen-go
 go 1.17
 
 require (
+	github.com/alash3al/go-pubsub v0.0.0-20200412052039-02569461a126
+	github.com/dgrijalva/jwt-go v3.2.0+incompatible
 	github.com/go-gormigrate/gormigrate/v2 v2.0.0
 	github.com/gorilla/mux v1.8.0
 	github.com/mitchellh/go-homedir v1.1.0
 	github.com/rs/cors v1.8.2
+	github.com/sirupsen/logrus v1.4.2
 	github.com/spf13/cobra v1.4.0
 	github.com/spf13/viper v1.10.1
+	golang.org/x/crypto v0.0.0-20210817164053-32db794688a5
 	gorm.io/driver/mysql v1.3.2
 	gorm.io/gorm v1.23.3
 )
@@ -20,6 +24,7 @@ require (
 	github.com/inconshreveable/mousetrap v1.0.0 // indirect
 	github.com/jinzhu/inflection v1.0.0 // indirect
 	github.com/jinzhu/now v1.1.4 // indirect
+	github.com/konsorten/go-windows-terminal-sequences v1.0.2 // indirect
 	github.com/magiconair/properties v1.8.5 // indirect
 	github.com/mitchellh/mapstructure v1.4.3 // indirect
 	github.com/pelletier/go-toml v1.9.4 // indirect
