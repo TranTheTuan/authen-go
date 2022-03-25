@@ -20,6 +20,8 @@ const (
 	MySQLLoc                = "system-mysql-loc"
 	MySQLMaxOpenConnections = "system-mysql-max-open-conns"
 	MySQLMaxIdleConnections = "system-mysql-max-idle-conns"
+
+	RBACFilePath = "system-rbac-file-path"
 )
 
 var cfgFile string
@@ -75,6 +77,9 @@ func initConfig() {
 }
 
 func initConfiguration() {
+	rootCmd.PersistentFlags().String("system-mode", "root", "mysql username")
+	rootCmd.PersistentFlags().String("system-gorm-log-mode", "root", "mysql username")
+
 	rootCmd.PersistentFlags().String(MySQLUserName, "root", "mysql username")
 	rootCmd.PersistentFlags().String(MySQLPassword, "", "mysql password")
 	rootCmd.PersistentFlags().String(MySQLDatabase, "authentication", "mysql database name")
@@ -85,17 +90,21 @@ func initConfiguration() {
 	rootCmd.PersistentFlags().String(MySQLMaxOpenConnections, "20", "mysql SetMaxOpenConns")
 	rootCmd.PersistentFlags().String(MySQLMaxIdleConnections, "2", "mysql SetMaxIdleConns")
 
+	rootCmd.PersistentFlags().String(RBACFilePath, "cmd/config/rbac.conf", "rbac config file path")
+
 	//Bind flags to viper
 	_ = viper.BindPFlag("system-mode", rootCmd.PersistentFlags().Lookup("system-mode"))
 	_ = viper.BindPFlag("system-gorm-log-mode", rootCmd.PersistentFlags().Lookup("system-gorm-log-mode"))
 
-	_ = viper.BindPFlag(MySQLUserName, rootCmd.PersistentFlags().Lookup("system-mysql-username"))
-	_ = viper.BindPFlag(MySQLPassword, rootCmd.PersistentFlags().Lookup("system-mysql-password"))
-	_ = viper.BindPFlag(MySQLDatabase, rootCmd.PersistentFlags().Lookup("system-mysql-database"))
-	_ = viper.BindPFlag(MySQLHost, rootCmd.PersistentFlags().Lookup("system-mysql-host"))
-	_ = viper.BindPFlag(MySQLPort, rootCmd.PersistentFlags().Lookup("system-mysql-port"))
-	_ = viper.BindPFlag(MySQLCharset, rootCmd.PersistentFlags().Lookup("system-mysql-charset"))
-	_ = viper.BindPFlag(MySQLLoc, rootCmd.PersistentFlags().Lookup("system-mysql-loc"))
+	_ = viper.BindPFlag(MySQLUserName, rootCmd.PersistentFlags().Lookup(MySQLUserName))
+	_ = viper.BindPFlag(MySQLPassword, rootCmd.PersistentFlags().Lookup(MySQLPassword))
+	_ = viper.BindPFlag(MySQLDatabase, rootCmd.PersistentFlags().Lookup(MySQLDatabase))
+	_ = viper.BindPFlag(MySQLHost, rootCmd.PersistentFlags().Lookup(MySQLHost))
+	_ = viper.BindPFlag(MySQLPort, rootCmd.PersistentFlags().Lookup(MySQLPort))
+	_ = viper.BindPFlag(MySQLCharset, rootCmd.PersistentFlags().Lookup(MySQLCharset))
+	_ = viper.BindPFlag(MySQLLoc, rootCmd.PersistentFlags().Lookup(MySQLLoc))
 	_ = viper.BindPFlag(MySQLMaxOpenConnections, rootCmd.PersistentFlags().Lookup(MySQLMaxOpenConnections))
 	_ = viper.BindPFlag(MySQLMaxIdleConnections, rootCmd.PersistentFlags().Lookup(MySQLMaxIdleConnections))
+
+	_ = viper.BindPFlag(RBACFilePath, rootCmd.PersistentFlags().Lookup(RBACFilePath))
 }

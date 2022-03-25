@@ -3,9 +3,9 @@ package casbin
 import (
 	"fmt"
 
-	"github.com/casbin/casbin/v3"
-	gormadapter "github.com/casbin/gorm-adapter/v3"
-	"gorm.io/gorm"
+	"github.com/casbin/casbin/v2"
+	gormadapter "github.com/casbin/gorm-adapter/v2"
+	"github.com/jinzhu/gorm"
 )
 
 var cb *casbin.Enforcer
@@ -34,6 +34,10 @@ func PreDefineRoleAndPolicy() {
 	cb.AddPolicy("MEMBER_PERSONA_USER", "/tasks", "POST", "0")
 	cb.AddPolicy("MEMBER_PERSONA_USER", "/tasks", "PUT", "0")
 	cb.AddPolicy("MEMBER_PERSONA_USER", "/tasks", "DELETE", "0")
+}
+
+func GetCasbin() *casbin.Enforcer {
+	return cb
 }
 
 func AddRole(role string, policy string) (bool, error) {

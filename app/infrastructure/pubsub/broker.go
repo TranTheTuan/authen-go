@@ -2,7 +2,7 @@ package pubsub
 
 import (
 	gpubsub "github.com/alash3al/go-pubsub"
-	"gorm.io/gorm"
+	"github.com/jinzhu/gorm"
 )
 
 const (

@@ -4,17 +4,22 @@ import (
 	"encoding/json"
 	"net/http"
 
+	"authen-go/app/domain/dto"
 	"authen-go/app/domain/model"
 	"authen-go/app/domain/usecase"
+
+	"github.com/gorilla/mux"
 )
 
 type AuthHandler struct {
-	userUsecase usecase.UserUsecaseInterface
+	userUsecase   usecase.UserUsecaseInterface
+	authorUsecase usecase.AuthorUsecaseInterface
 }
 
-func NewAuthHandler(userUsecase usecase.UserUsecaseInterface) *AuthHandler {
+func NewAuthHandler(userUsecase usecase.UserUsecaseInterface, authorUsecase usecase.AuthorUsecaseInterface) *AuthHandler {
 	return &AuthHandler{
-		userUsecase: userUsecase,
+		userUsecase:   userUsecase,
+		authorUsecase: authorUsecase,
 	}
 }
 
@@ -33,7 +38,6 @@ func (a *AuthHandler) Login(w http.ResponseWriter, r *http.Request) {
 	}
 
 	JSONResponse(w, http.StatusOK, true, "logged in successfully", tokenInfo, nil)
-	return
 }
 
 func (a *AuthHandler) Register(w http.ResponseWriter, r *http.Request) {
@@ -51,5 +55,27 @@ func (a *AuthHandler) Register(w http.ResponseWriter, r *http.Request) {
 	}
 
 	JSONResponse(w, http.StatusOK, true, "registered successfully", user, nil)
-	return
+}
+
+func (a *AuthHandler) TestAuthorize(w http.ResponseWriter, r *http.Request) {
+	method := r.Method
+	requestUri := r.RequestURI
+	casbinUser := mux.Vars(r)["id"]
+
+	isAuthorized, err := a.authorUsecase.Authorize(r.Context(), &dto.AuthorizeDTO{
+		CasbinUser: casbinUser,
+		RequestURI: requestUri,
+		Method:     method,
+	})
+	if err != nil {
+		JSONResponse(w, http.StatusInternalServerError, false, "unauthorized", nil, err)
+		return
+	}
+
+	if !isAuthorized {
+		JSONResponse(w, http.StatusOK, true, "unauthorized", isAuthorized, nil)
+		return
+	}
+
+	JSONResponse(w, http.StatusOK, true, "authorized", isAuthorized, nil)
 }

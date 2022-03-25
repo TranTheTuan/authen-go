@@ -1,12 +1,13 @@
 package pubsub
 
 import (
-	"authen-go/app/domain/model"
 	"encoding/json"
 
 	gpubsub "github.com/alash3al/go-pubsub"
+	"github.com/jinzhu/gorm"
 	log "github.com/sirupsen/logrus"
-	"gorm.io/gorm"
+
+	"authen-go/app/domain/model"
 )
 
 type IndexUser struct {

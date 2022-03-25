@@ -9,11 +9,10 @@ import (
 	"time"
 
 	"github.com/gorilla/mux"
+	"github.com/jinzhu/gorm"
 	"github.com/rs/cors"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
-	"gorm.io/driver/mysql"
-	"gorm.io/gorm"
 
 	"authen-go/app/domain/service"
 	"authen-go/app/domain/usecase"
@@ -39,7 +38,7 @@ func runServeHTTPCmd(cmd *cobra.Command, args []string) {
 	signal.Notify(c, os.Interrupt, syscall.SIGINT, syscall.SIGTERM)
 	d := initDB()
 	mysqlDsn := d.ToDSN()
-	orm, err := gorm.Open(mysql.Open(mysqlDsn), &gorm.Config{})
+	orm, err := gorm.Open("mysql", mysqlDsn)
 	if err != nil {
 		panic(err)
 	}
@@ -47,27 +46,31 @@ func runServeHTTPCmd(cmd *cobra.Command, args []string) {
 	maxOpenConnections := viper.GetInt(MySQLMaxOpenConnections)
 	maxIdleConnections := viper.GetInt(MySQLMaxIdleConnections)
 
-	sqlDB, _ := orm.DB()
-	sqlDB.SetMaxOpenConns(maxOpenConnections)
-	sqlDB.SetMaxIdleConns(maxIdleConnections)
-	sqlDB.SetConnMaxLifetime(200 * time.Minute)
+	orm.DB().SetMaxOpenConns(maxOpenConnections)
+	orm.DB().SetMaxIdleConns(maxIdleConnections)
+	orm.DB().SetConnMaxLifetime(200 * time.Minute)
 
 	go func() {
-		casbin.InitFromSQLLite(orm, "")
+		casbin.InitFromSQLLite(orm, viper.GetString(RBACFilePath))
 		pubsub.InitPubSub(orm)
 
 		userRepo := repository.NewUserRepository(orm)
 		userService := service.NewUserService(userRepo)
 		userUsecase := usecase.NewUserUsecase(userService)
-		authHandler := httpHandler.NewAuthHandler(userUsecase)
+		authorUsecase := usecase.NewAuthorUsecase()
+		authHandler := httpHandler.NewAuthHandler(userUsecase, authorUsecase)
 
 		router := mux.NewRouter().PathPrefix("/v1/auth/").Subrouter()
 		router.Use(pubsub.EventDispatcherMiddleware)
 		router.HandleFunc("/login", authHandler.Login).Methods("POST")
 		router.HandleFunc("/register", authHandler.Register).Methods("POST")
 
+		router1 := mux.NewRouter().PathPrefix("/v1/tasks/").Subrouter()
+		router1.HandleFunc("/{id:[0-9]+}", authHandler.TestAuthorize).Methods("POST")
+
 		httpMux := http.NewServeMux()
 		httpMux.Handle("/v1/auth/", router)
+		httpMux.Handle("/v1/tasks/", router1)
 
 		httpHandler := cors.AllowAll().Handler(httpMux)
 
