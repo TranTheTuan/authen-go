@@ -3,8 +3,8 @@ package usecase
 import (
 	"context"
 
-	"authen-go/app/domain/dto"
-	"authen-go/app/infrastructure/casbin"
+	"github.com/TranTheTuan/authen-go/app/domain/dto"
+	"github.com/TranTheTuan/authen-go/app/infrastructure/casbin"
 )
 
 type AuthorUsecaseInterface interface {

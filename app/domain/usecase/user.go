@@ -1,10 +1,11 @@
 package usecase
 
 import (
-	"authen-go/app/domain/model"
-	"authen-go/app/domain/service"
-	"authen-go/app/infrastructure/util"
 	"errors"
+
+	"github.com/TranTheTuan/authen-go/app/domain/model"
+	"github.com/TranTheTuan/authen-go/app/domain/service"
+	"github.com/TranTheTuan/authen-go/app/infrastructure/util"
 )
 
 type UserUsecaseInterface interface {

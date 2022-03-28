@@ -1,7 +1,7 @@
 package migration
 
 import (
-	"authen-go/app/domain/common"
+	"github.com/TranTheTuan/authen-go/app/domain/common"
 
 	"gorm.io/gorm"
 )

@@ -1,8 +1,9 @@
 package model
 
 import (
-	"authen-go/app/domain/common"
 	"encoding/json"
+
+	"github.com/TranTheTuan/authen-go/app/domain/common"
 
 	"gorm.io/gorm"
 )

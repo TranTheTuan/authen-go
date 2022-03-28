@@ -5,7 +5,7 @@ import (
 
 	"github.com/jinzhu/gorm"
 
-	"authen-go/app/domain/model"
+	"github.com/TranTheTuan/authen-go/app/domain/model"
 )
 
 type UserRepository struct {

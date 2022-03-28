@@ -27,7 +27,7 @@ const (
 var cfgFile string
 
 var rootCmd = &cobra.Command{
-	Use:   "authen-go",
+	Use:   "github.com/TranTheTuan/authen-go",
 	Short: "authentication root cmd",
 }
 

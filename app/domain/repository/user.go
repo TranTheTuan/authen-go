@@ -1,7 +1,7 @@
 package repository
 
 import (
-	"authen-go/app/domain/model"
+	"github.com/TranTheTuan/authen-go/app/domain/model"
 )
 
 type UserRepositoryInterface interface {

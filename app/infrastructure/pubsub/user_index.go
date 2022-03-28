@@ -7,7 +7,7 @@ import (
 	"github.com/jinzhu/gorm"
 	log "github.com/sirupsen/logrus"
 
-	"authen-go/app/domain/model"
+	"github.com/TranTheTuan/authen-go/app/domain/model"
 )
 
 type IndexUser struct {

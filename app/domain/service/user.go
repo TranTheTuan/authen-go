@@ -5,10 +5,10 @@ import (
 
 	"github.com/jinzhu/gorm"
 
-	"authen-go/app/domain/model"
-	"authen-go/app/domain/repository"
-	"authen-go/app/infrastructure/casbin"
-	"authen-go/app/infrastructure/util"
+	"github.com/TranTheTuan/authen-go/app/domain/model"
+	"github.com/TranTheTuan/authen-go/app/domain/repository"
+	"github.com/TranTheTuan/authen-go/app/infrastructure/casbin"
+	"github.com/TranTheTuan/authen-go/app/infrastructure/util"
 )
 
 type UserServiceInterface interface {
