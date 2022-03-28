@@ -8,7 +8,7 @@ import (
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
 
-	"authen-go/migration"
+	"github.com/TranTheTuan/authen-go/migration"
 )
 
 var migrateCmd = &cobra.Command{

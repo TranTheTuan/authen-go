@@ -14,12 +14,12 @@ import (
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
 
-	"authen-go/app/domain/service"
-	"authen-go/app/domain/usecase"
-	"authen-go/app/infrastructure/casbin"
-	httpHandler "authen-go/app/infrastructure/http"
-	"authen-go/app/infrastructure/pubsub"
-	"authen-go/app/infrastructure/repository"
+	"github.com/TranTheTuan/authen-go/app/domain/service"
+	"github.com/TranTheTuan/authen-go/app/domain/usecase"
+	"github.com/TranTheTuan/authen-go/app/infrastructure/casbin"
+	httpHandler "github.com/TranTheTuan/authen-go/app/infrastructure/http"
+	"github.com/TranTheTuan/authen-go/app/infrastructure/pubsub"
+	"github.com/TranTheTuan/authen-go/app/infrastructure/repository"
 )
 
 var httpCmd = &cobra.Command{

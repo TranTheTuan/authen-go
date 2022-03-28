@@ -4,9 +4,9 @@ import (
 	"encoding/json"
 	"net/http"
 
-	"authen-go/app/domain/dto"
-	"authen-go/app/domain/model"
-	"authen-go/app/domain/usecase"
+	"github.com/TranTheTuan/authen-go/app/domain/dto"
+	"github.com/TranTheTuan/authen-go/app/domain/model"
+	"github.com/TranTheTuan/authen-go/app/domain/usecase"
 
 	"github.com/gorilla/mux"
 )

@@ -1,6 +1,6 @@
 package dto
 
-import "authen-go/app/domain/model"
+import "github.com/TranTheTuan/authen-go/app/domain/model"
 
 type CreateUserDto struct {
 	Username string `json:"user_name`
