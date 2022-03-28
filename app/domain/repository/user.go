@@ -5,7 +5,7 @@ import (
 )
 
 type UserRepositoryInterface interface {
-	Login(username string) (*model.User, error)
-	IsUsernameExist(username string) (bool, error)
-	Register(user *model.User) (*model.User, error)
+	FindUserByUsername(username string) (*model.User, error)
+	// IsUsernameExist(username string) (bool, error)
+	CreateUser(user *model.User) (*model.User, error)
 }

@@ -1,9 +1,11 @@
 package repository
 
 import (
-	"authen-go/app/domain/model"
+	"fmt"
 
-	"gorm.io/gorm"
+	"github.com/jinzhu/gorm"
+
+	"authen-go/app/domain/model"
 )
 
 type UserRepository struct {
@@ -16,7 +18,7 @@ func NewUserRepository(db *gorm.DB) *UserRepository {
 	}
 }
 
-func (repo *UserRepository) Login(username string) (*model.User, error) {
+func (repo *UserRepository) FindUserByUsername(username string) (*model.User, error) {
 	var tmpUser model.User
 	err := repo.db.Where("username = ?", username).First(&tmpUser).Error
 	if err != nil {
@@ -28,20 +30,20 @@ func (repo *UserRepository) Login(username string) (*model.User, error) {
 	return nil, err
 }
 
-func (repo *UserRepository) IsUsernameExist(username string) (bool, error) {
-	var tmpObj model.User
-	err := repo.db.Where("username = ?", username).First(&tmpObj).Error
-	if err != nil && err != gorm.ErrRecordNotFound {
-		return false, err
-	}
-	if tmpObj.ID > 0 {
-		return true, nil
-	}
-	return false, nil
-}
+func (repo *UserRepository) CreateUser(user *model.User) (*model.User, error) {
+	err := repo.db.Transaction(func(db *gorm.DB) error {
+		if err := db.Create(&user).Error; err != nil {
+			return err
+		}
 
-func (repo *UserRepository) Register(user *model.User) (*model.User, error) {
-	if err := repo.db.Create(&user).Error; err != nil {
+		user.CasbinUser = fmt.Sprint(user.ID)
+		if err := db.Model(model.User{}).Save(&user).Error; err != nil {
+			return err
+		}
+		return nil
+	})
+
+	if err != nil {
 		return nil, err
 	}
 	return user, nil

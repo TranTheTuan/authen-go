@@ -8,8 +8,8 @@ import (
 func Migrate(db *gorm.DB) error {
 	m := gormigrate.New(db, gormigrate.DefaultOptions, []*gormigrate.Migration{
 		{
-			ID:      "2021122816360",
-			Migrate: migrationVersion2021122816360,
+			ID:      "20220325100400",
+			Migrate: migrationVersion20220325100400,
 		},
 		{
 			ID:      "2022032316040",

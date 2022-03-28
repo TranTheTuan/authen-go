@@ -1,10 +1,14 @@
 package service
 
 import (
+	"errors"
+
+	"github.com/jinzhu/gorm"
+
 	"authen-go/app/domain/model"
 	"authen-go/app/domain/repository"
+	"authen-go/app/infrastructure/casbin"
 	"authen-go/app/infrastructure/util"
-	"errors"
 )
 
 type UserServiceInterface interface {
@@ -24,7 +28,7 @@ func NewUserService(userRepo repository.UserRepositoryInterface) *UserService {
 }
 
 func (u *UserService) Login(user *model.User) (*model.User, error) {
-	loggedInUser, err := u.userRepo.Login(user.Username)
+	loggedInUser, err := u.userRepo.FindUserByUsername(user.Username)
 	if err != nil {
 		return nil, err
 	}
@@ -35,9 +39,25 @@ func (u *UserService) Login(user *model.User) (*model.User, error) {
 }
 
 func (u *UserService) IsUsernameExist(username string) (bool, error) {
-	return u.userRepo.IsUsernameExist(username)
+	_, err := u.userRepo.FindUserByUsername(username)
+	if err != nil {
+		if errors.Is(err, gorm.ErrRecordNotFound) {
+			return false, nil
+		}
+		return false, err
+	}
+
+	return true, nil
 }
 
 func (u *UserService) Register(user *model.User) (*model.User, error) {
-	return u.userRepo.Register(user)
+	user, err := u.userRepo.CreateUser(user)
+	if err != nil {
+		return nil, err
+	}
+	_, err = casbin.AddRole(user.CasbinUser, "MEMBER_PERSONA_USER")
+	if err != nil {
+		return nil, err
+	}
+	return user, nil
 }
