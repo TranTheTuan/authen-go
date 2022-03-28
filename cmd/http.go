@@ -74,14 +74,15 @@ func runServeHTTPCmd(cmd *cobra.Command, args []string) {
 
 		httpHandler := cors.AllowAll().Handler(httpMux)
 
+		gwAddr := viper.GetString(SystemGRPCGatewayAddr)
 		srv := &http.Server{
-			Addr:         ":8080",
+			Addr:         gwAddr,
 			Handler:      httpHandler,
 			IdleTimeout:  60 * time.Second,
 			ReadTimeout:  15 * time.Second,
 			WriteTimeout: 15 * time.Second,
 		}
-		logger.Print("server started")
+		logger.Println("Serving gRPC gateway on 0.0.0.0:8081")
 		err = srv.ListenAndServe()
 		if err != nil {
 			panic(err)

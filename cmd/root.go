@@ -21,7 +21,9 @@ const (
 	MySQLMaxOpenConnections = "system-mysql-max-open-conns"
 	MySQLMaxIdleConnections = "system-mysql-max-idle-conns"
 
-	RBACFilePath = "system-rbac-file-path"
+	RBACFilePath          = "system-rbac-file-path"
+	SystemGrpcAddr        = "system-grpc-addr"
+	SystemGRPCGatewayAddr = "system-grpc-gw-addr"
 )
 
 var cfgFile string
@@ -91,6 +93,8 @@ func initConfiguration() {
 	rootCmd.PersistentFlags().String(MySQLMaxIdleConnections, "2", "mysql SetMaxIdleConns")
 
 	rootCmd.PersistentFlags().String(RBACFilePath, "cmd/config/rbac.conf", "rbac config file path")
+	rootCmd.PersistentFlags().String(SystemGrpcAddr, ":8080", "address of auth grpc server")
+	rootCmd.PersistentFlags().String(SystemGRPCGatewayAddr, ":8081", "address of auth grpc server")
 
 	//Bind flags to viper
 	_ = viper.BindPFlag("system-mode", rootCmd.PersistentFlags().Lookup("system-mode"))
@@ -107,4 +111,6 @@ func initConfiguration() {
 	_ = viper.BindPFlag(MySQLMaxIdleConnections, rootCmd.PersistentFlags().Lookup(MySQLMaxIdleConnections))
 
 	_ = viper.BindPFlag(RBACFilePath, rootCmd.PersistentFlags().Lookup(RBACFilePath))
+	_ = viper.BindPFlag(SystemGrpcAddr, rootCmd.PersistentFlags().Lookup(SystemGrpcAddr))
+	_ = viper.BindPFlag(SystemGRPCGatewayAddr, rootCmd.PersistentFlags().Lookup(SystemGRPCGatewayAddr))
 }
