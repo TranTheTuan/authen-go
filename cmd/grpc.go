@@ -54,7 +54,8 @@ func runServeGRPCCmd(cmd *cobra.Command, args []string) {
 		authorizeServiceServer := internalGrpc.NewAuthorizeServiceServer(authorUsecase)
 
 		grpcServer := grpc.NewServer()
-		pbAuth.RegisterAuthorizeServiceServer(grpcServer, authorizeServiceServer)
+		pbAuth.RegisterAuthAuthorizeServiceServer(grpcServer, authorizeServiceServer)
+		pbAuth.RegisterAuthVerifyServiceServer(grpcServer, authorizeServiceServer)
 
 		grpcAddr := viper.GetString(SystemGrpcAddr)
 		lis, err := net.Listen("tcp", grpcAddr)

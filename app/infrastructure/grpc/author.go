@@ -11,7 +11,9 @@ import (
 
 type AuthorizeServiceServer struct {
 	authorUsecase usecase.AuthorUsecaseInterface
-	pbAuth.UnimplementedAuthorizeServiceServer
+
+	pbAuth.UnimplementedAuthAuthorizeServiceServer
+	pbAuth.UnimplementedAuthVerifyServiceServer
 }
 
 func NewAuthorizeServiceServer(authorUsecase usecase.AuthorUsecaseInterface) *AuthorizeServiceServer {
