@@ -30,10 +30,11 @@ func InitFromSQLLite(db *gorm.DB, rbac_path_str string) {
 }
 
 func PreDefineRoleAndPolicy() {
-	cb.AddPolicy("MEMBER_PERSONA_USER", "/tasks", "GET", "0")
-	cb.AddPolicy("MEMBER_PERSONA_USER", "/tasks", "POST", "0")
-	cb.AddPolicy("MEMBER_PERSONA_USER", "/tasks", "PUT", "0")
-	cb.AddPolicy("MEMBER_PERSONA_USER", "/tasks", "DELETE", "0")
+	cb.AddPolicy("MEMBER_PERSONA_USER", "/v1/tasks", "/task.v1.TaskService/GetTasks", "0")
+	cb.AddPolicy("MEMBER_PERSONA_USER", "/v1/tasks/{id}", "/task.v1.TaskService/GetTaskByID", "0")
+	cb.AddPolicy("MEMBER_PERSONA_USER", "/v1/tasks", "/task.v1.TaskService/CreateTask", "0")
+	cb.AddPolicy("MEMBER_PERSONA_USER", "/v1/tasks/{id}", "/task.v1.TaskService/UpdateTask", "0")
+	cb.AddPolicy("MEMBER_PERSONA_USER", "/v1/tasks/{id}", "/task.v1.TaskService/DeleteTaskByID", "0")
 }
 
 func GetCasbin() *casbin.Enforcer {

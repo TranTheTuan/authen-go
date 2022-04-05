@@ -5,12 +5,13 @@ import (
 
 	"github.com/TranTheTuan/authen-go/app/domain/dto"
 	"github.com/TranTheTuan/authen-go/app/domain/usecase"
-
+	"github.com/TranTheTuan/authen-go/app/infrastructure/util"
 	pbAuth "github.com/TranTheTuan/pbtypes/build/go/auth"
 )
 
 type AuthorizeServiceServer struct {
 	authorUsecase usecase.AuthorUsecaseInterface
+	pbAuth.UnimplementedAuthorizeServiceServer
 }
 
 func NewAuthorizeServiceServer(authorUsecase usecase.AuthorUsecaseInterface) *AuthorizeServiceServer {
@@ -30,5 +31,17 @@ func (a *AuthorizeServiceServer) Authorize(ctx context.Context, in *pbAuth.Autho
 	}
 	return &pbAuth.AuthorizeResponse{
 		Pass: isAuthorized,
+	}, nil
+}
+
+func (a *AuthorizeServiceServer) VerifyToken(ctx context.Context, in *pbAuth.VerifyTokenRequest) (*pbAuth.VerifyTokenResponse, error) {
+	j := util.NewJWT()
+	claim, err := j.ParseToken(in.Token)
+	if err != nil {
+		return nil, err
+	}
+
+	return &pbAuth.VerifyTokenResponse{
+		Id: uint32(claim.ID),
 	}, nil
 }

@@ -53,15 +53,26 @@ func runServeGRPCCmd(cmd *cobra.Command, args []string) {
 		authorUsecase := usecase.NewAuthorUsecase()
 		authorizeServiceServer := internalGrpc.NewAuthorizeServiceServer(authorUsecase)
 
-		s := grpc.NewServer()
-		pbAuth.RegisterAuthorizeServiceServer(s, authorizeServiceServer)
+		grpcServer := grpc.NewServer()
+		pbAuth.RegisterAuthorizeServiceServer(grpcServer, authorizeServiceServer)
 
-		lis, err := net.Listen("tcp", ":8080")
+		grpcAddr := viper.GetString(SystemGrpcAddr)
+		lis, err := net.Listen("tcp", grpcAddr)
 		if err != nil {
 			logger.Fatalln("Failed to listen:", err)
+			panic(err)
 		}
 		logger.Println("Serving gRPC on 0.0.0.0:8080")
-		logger.Fatalln(s.Serve(lis))
+		err = grpcServer.Serve(lis)
+		defer func() {
+			err = lis.Close()
+			if err != nil {
+				logger.Fatal(err)
+			}
+		}()
+		if err != nil {
+			panic(err)
+		}
 	}()
 	<-c
 	logger.Print("server graceful shutdown")
