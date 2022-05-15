@@ -3,6 +3,7 @@ package cmd
 import (
 	"fmt"
 	"os"
+	"path"
 	"strings"
 
 	"github.com/mitchellh/go-homedir"
@@ -92,7 +93,10 @@ func initConfiguration() {
 	rootCmd.PersistentFlags().String(MySQLMaxOpenConnections, "20", "mysql SetMaxOpenConns")
 	rootCmd.PersistentFlags().String(MySQLMaxIdleConnections, "2", "mysql SetMaxIdleConns")
 
-	rootCmd.PersistentFlags().String(RBACFilePath, "cmd/config/rbac.conf", "rbac config file path")
+	rootPath, _ := os.Getwd()
+	rbacConfigPath := path.Join(rootPath, "rbac.conf")
+	fmt.Println("Rbac config path default: ", rbacConfigPath)
+	rootCmd.PersistentFlags().String(RBACFilePath, rbacConfigPath, "rbac config file path")
 	rootCmd.PersistentFlags().String(SystemGrpcAddr, ":8080", "address of auth grpc server")
 	rootCmd.PersistentFlags().String(SystemGRPCGatewayAddr, ":8081", "address of auth grpc server")
 

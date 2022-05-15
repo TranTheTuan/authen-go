@@ -7,6 +7,7 @@ import (
 	"github.com/TranTheTuan/authen-go/app/domain/usecase"
 	"github.com/TranTheTuan/authen-go/app/infrastructure/util"
 	pbAuth "github.com/TranTheTuan/pbtypes/build/go/auth"
+	"github.com/sirupsen/logrus"
 )
 
 type AuthorizeServiceServer struct {
@@ -23,14 +24,21 @@ func NewAuthorizeServiceServer(authorUsecase usecase.AuthorUsecaseInterface) *Au
 }
 
 func (a *AuthorizeServiceServer) Authorize(ctx context.Context, in *pbAuth.AuthorizeRequest) (*pbAuth.AuthorizeResponse, error) {
+	logger := logrus.WithFields(logrus.Fields{
+		"casbin_user": in.CasbinUser,
+		"request_uri": in.RequestUri,
+		"method":      in.Method,
+	})
 	isAuthorized, err := a.authorUsecase.Authorize(ctx, &dto.AuthorizeDTO{
 		CasbinUser: in.CasbinUser,
 		RequestURI: in.RequestUri,
 		Method:     in.Method,
 	})
 	if err != nil {
+		logger.WithError(err).Error("authorize failed")
 		return nil, err
 	}
+	logger.WithField("is_authorized", isAuthorized).Info("authorized success")
 	return &pbAuth.AuthorizeResponse{
 		Pass: isAuthorized,
 	}, nil

@@ -30,11 +30,11 @@ func InitFromSQLLite(db *gorm.DB, rbac_path_str string) {
 }
 
 func PreDefineRoleAndPolicy() {
-	cb.AddPolicy("MEMBER_PERSONA_USER", "/v1/tasks", "/task.v1.TaskService/GetTasks", "0")
-	cb.AddPolicy("MEMBER_PERSONA_USER", "/v1/tasks/{id}", "/task.v1.TaskService/GetTaskByID", "0")
-	cb.AddPolicy("MEMBER_PERSONA_USER", "/v1/tasks", "/task.v1.TaskService/CreateTask", "0")
-	cb.AddPolicy("MEMBER_PERSONA_USER", "/v1/tasks/{id}", "/task.v1.TaskService/UpdateTask", "0")
-	cb.AddPolicy("MEMBER_PERSONA_USER", "/v1/tasks/{id}", "/task.v1.TaskService/DeleteTaskByID", "0")
+	cb.AddPolicy("MEMBER_PERSONA_USER", "/v1/tasks", "/task.v1.TaskService/GetTasks")
+	cb.AddPolicy("MEMBER_PERSONA_USER", "/v1/tasks/{id}", "/task.v1.TaskService/GetTaskByID")
+	cb.AddPolicy("MEMBER_PERSONA_USER", "/v1/tasks", "/task.v1.TaskService/CreateTask")
+	cb.AddPolicy("MEMBER_PERSONA_USER", "/v1/tasks/{id}", "/task.v1.TaskService/UpdateTask")
+	cb.AddPolicy("MEMBER_PERSONA_USER", "/v1/tasks/{id}", "/task.v1.TaskService/DeleteTaskByID")
 }
 
 func GetCasbin() *casbin.Enforcer {

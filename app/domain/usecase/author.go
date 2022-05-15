@@ -20,5 +20,7 @@ func NewAuthorUsecase() *AuthorUsecase {
 func (a *AuthorUsecase) Authorize(ctx context.Context, authorizeDto *dto.AuthorizeDTO) (bool, error) {
 	casbin := casbin.GetCasbin()
 
-	return casbin.Enforce(authorizeDto.CasbinUser, authorizeDto.RequestURI, authorizeDto.Method)
+	isAuthorized, _, err := casbin.EnforceEx("1", authorizeDto.RequestURI, authorizeDto.Method)
+	// fmt.Println(casbin.GetPolicy())
+	return isAuthorized, err
 }
