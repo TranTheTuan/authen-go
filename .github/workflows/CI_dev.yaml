@@ -2,14 +2,15 @@ name: Development CI
 on:
   push:
     branches:
-      - "dev"
+      - dev
   pull_request:
     branches:
-    - "dev"
+      - dev
 jobs:
   build-code:
     uses: ./.github/workflows/build_code.yaml
 
   build-image:
+    if: github.event_name == 'push'
     uses: ./.github/workflows/build_image.yaml
     needs: [build-code]
