@@ -1,0 +1,16 @@
+name: Development CI
+on:
+  push:
+    branches:
+      - "dev"
+  pull_request:
+    branches:
+    - "dev"
+jobs:
+  build-code:
+    uses: ./.github/workflows/build_code.yaml
+
+  build-image:
+    uses: ./.github/workflows/build_image.yaml
+
+  
