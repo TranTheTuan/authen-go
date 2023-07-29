@@ -1,0 +1,41 @@
+name: Build Image
+on:
+  workflow_call:
+
+env:
+  REGISTRY: ghcr.io
+  IMAGE_NAME: ${{github.repository}}
+
+jobs:
+  build-image:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: 'read'
+      id-token: 'write'
+    outputs:
+      tag: ${{ steps.set_outputs.outputs.tag_encrypted }}
+    steps:
+      - name: Checkout the code
+        uses: actions/checkout@v3
+      
+      - name: Log in to the container registry
+        uses: docker/login-action@v1
+        with:
+          registry: ${{ env.REGISTRY }}
+          username: ${{ github.actor }}
+          passowrd: ${{ secrets.GITHUB_TOKEN }}
+      
+      - name: Docker Metadata action
+        uses: docker/metadata-action@v4.6.0
+        id: meta
+        with:
+          images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
+      
+      - name: Build and push image
+        uses: docker/build-push-action@v3
+        with:
+          context: .
+          push: true
+          tags: ${{ steps.meta.outputs.tags }}
+
+    
