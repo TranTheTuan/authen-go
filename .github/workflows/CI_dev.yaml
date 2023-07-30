@@ -25,6 +25,6 @@ jobs:
 
   deploy-app:
     if: github.event_name == 'push' 
-    uses: TranTheTuan/orchestrator/.github/workflows/update_image.yaml
+    uses: TranTheTuan/orchestrator/.github/workflows/update_image.yaml@master
     with:
       image: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
