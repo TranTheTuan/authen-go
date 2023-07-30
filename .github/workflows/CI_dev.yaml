@@ -13,11 +13,11 @@ env:
 
 jobs:
   build-code:
-    uses: ./.github/workflows/build_code.yaml
+    uses: TranTheTuan/orchestrator/.github/workflows/build_code.yaml
 
   build-image:
     if: github.event_name == 'push'
-    uses: ./.github/workflows/build_image.yaml
+    uses: TranTheTuan/orchestrator/.github/workflows/build_image.yaml
     needs: [build-code]
     with:
       image: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
