@@ -6,6 +6,11 @@ on:
   pull_request:
     branches:
       - dev
+
+env:
+  REGISTRY: ghcr.io
+  IMAGE_NAME: ${{ github.repository }}
+
 jobs:
   build-code:
     uses: ./.github/workflows/build_code.yaml
@@ -14,3 +19,12 @@ jobs:
     if: github.event_name == 'push'
     uses: ./.github/workflows/build_image.yaml
     needs: [build-code]
+    with:
+      image: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
+      registry: ${{ env.REGISTRY }}
+
+  deploy-app:
+    if: github.event_name == 'push' 
+    uses: TranTheTuan/orchestrator/.github/workflows/update_image.yaml
+    with:
+      image: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
