@@ -1,48 +1,21 @@
-name: CICD workflows
-on:
-  push:
-    branches:
-      - master
-  pull_request:
-    branches:
-      - master
+name: Go package
+
+on: [push]
 
 jobs:
-  build_code:
+  build:
+
     runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        go-version: [1.18]
-        os: [ubuntu-latest]
     steps:
-      - name: Checkout the code
-        uses: actions/checkout@v3.5.3
+      - uses: actions/checkout@v3
 
-      - name: Setup Go
-        uses: actions/setup-go@v4.0.1
+      - name: Set up Go
+        uses: actions/setup-go@v4
         with:
-          go-version: '1.18'
-
-      - name: Cache go modules
-        uses: actions/cache@v1.2.1
-        with:
-          path: |
-            ~/go/pkg/mod
-            ~/.cache/go-build
-          key: ${{ runner.os }}-go-${{ matrix.go-version }}-${{ hashFiles('**/go.sum') }}
-          restore-keys: |
-            ${{ runner.os }}-go-${{ matrix.go-version }}-
-
-      - name: Verify dependencies
-        run: go mod verify
+          go-version: '1.15'
 
       - name: Build
         run: go build -v ./...
 
-      - name: Run golint
-        uses: golangci/golangci-lint-actions@v3
-
-      - name: Run tests
-        uses: go test -race -vet=off `go list ./... | grep -v test | grep -v vendor`
-
-
+      - name: Test
+        run: go test -v ./...
