@@ -16,6 +16,6 @@ jobs:
         os: [ubuntu-latest]
     steps:
       - name: Run Echo
-        uses: echo "works"
+        run: echo "works"
 
 
