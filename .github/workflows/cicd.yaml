@@ -15,7 +15,34 @@ jobs:
         go-version: [1.18]
         os: [ubuntu-latest]
     steps:
-      - name: Run Echo
-        run: echo "works"
+      - name: Checkout the code
+        uses: actions/checkout@v3.5.3
+
+      - name: Setup Go
+        uses: actions/setup-go@v4.0.1
+        with:
+          go-version: '1.18'
+
+      - name: Cache go modules
+        uses: actions/cache@v1.2.1
+        with:
+          path: |
+            ~/go/pkg/mod
+            ~/.cache/go-build
+          key: ${{ runner.os }}-go-${{ matrix.go-version }}-${{ hashFiles('**/go.sum') }}
+          restore-keys: |
+            ${{ runner.os }}-go-${{ matrix.go-version }}-
+
+      - name: Verify dependencies
+        run: go mod verify
+
+      - name: Build
+        run: go build -v ./...
+
+      - name: Run golint
+        uses: golangci/golangci-lint-actions@v3
+
+      - name: Run tests
+        uses: go test -race -vet=off `go list ./... | grep -v test | grep -v vendor`
 
 
