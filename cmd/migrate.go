@@ -33,5 +33,5 @@ func runMigrateCmd(cmd *cobra.Command, args []string) {
 	sqlDB.SetMaxIdleConns(maxIdleConnections)
 	sqlDB.SetConnMaxLifetime(200 * time.Minute)
 
-	migration.Migrate(orm)
+	_ = migration.Migrate(orm)
 }
