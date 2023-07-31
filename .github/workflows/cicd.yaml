@@ -1,0 +1,14 @@
+name: Go package
+
+on:
+  push:
+    branches:
+      - master
+  pull_request:
+    branches:
+      - master
+
+jobs:
+  build-code:
+    uses: ./.github/workflows/build_code.yaml
+
