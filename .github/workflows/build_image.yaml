@@ -1,6 +1,9 @@
 name: Build Image
 on:
   workflow_call:
+    outputs:
+      image:
+        value: ${{ jobs.build-image.outputs.output1 }}
 
 env:
   REGISTRY: ghcr.io
@@ -9,6 +12,8 @@ env:
 jobs:
   build-image:
     runs-on: ubuntu-latest
+    outputs:
+      output1: ${{ steps.write-output.outputs.image }}
     permissions:
       contents: 'read'
       packages: 'write'
@@ -35,3 +40,7 @@ jobs:
           context: .
           push: true
           tags: ${{ steps.meta.outputs.tags }}
+      
+      - name: Write job's output
+        id: write-output
+        run: echo "image=${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ steps.meta.outputs.tags }}" >> "$GITHUB_OUTPUT"
