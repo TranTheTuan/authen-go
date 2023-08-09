@@ -43,4 +43,4 @@ jobs:
       
       - name: Write job's output
         id: write-output
-        run: echo "image=${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ steps.meta.outputs.tags }}" >> "$GITHUB_OUTPUT"
+        run: echo "image=${{ steps.meta.outputs.tags }}" >> "$GITHUB_OUTPUT"
