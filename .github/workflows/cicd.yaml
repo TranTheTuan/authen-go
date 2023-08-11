@@ -23,5 +23,5 @@ jobs:
     with:
       image: ${{ needs.build-image.outputs.image }}
     secrets:
-      envPAT: ${{ secrets.PAT }}
+      secretPAT: ${{ secrets.PAT }}
     needs: [build-image]
