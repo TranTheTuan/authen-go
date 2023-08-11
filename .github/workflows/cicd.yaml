@@ -22,4 +22,6 @@ jobs:
     uses: TranTheTuan/orchestrator/.github/workflows/update_image.yaml@master
     with:
       image: ${{ needs.build-image.outputs.image }}
+    secrets:
+      secretPAT: ${{ secrets.PAT }}
     needs: [build-image]
