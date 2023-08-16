@@ -19,6 +19,7 @@ const (
 	MySQLPort               = "system-mysql-port"
 	MySQLCharset            = "system-mysql-charset"
 	MySQLLoc                = "system-mysql-loc"
+	MySQLTLS                = "system-mysql-tls"
 	MySQLMaxOpenConnections = "system-mysql-max-open-conns"
 	MySQLMaxIdleConnections = "system-mysql-max-idle-conns"
 
@@ -90,6 +91,7 @@ func initConfiguration() {
 	rootCmd.PersistentFlags().String(MySQLPort, "3306", "mysql port")
 	rootCmd.PersistentFlags().String(MySQLCharset, "utf8mb4", "mysql default database character set. Recommend utf8mb4 for better Unicode support")
 	rootCmd.PersistentFlags().String(MySQLLoc, "Local", "mysql password")
+	rootCmd.PersistentFlags().String(MySQLTLS, "false", "TLS connection")
 	rootCmd.PersistentFlags().String(MySQLMaxOpenConnections, "20", "mysql SetMaxOpenConns")
 	rootCmd.PersistentFlags().String(MySQLMaxIdleConnections, "2", "mysql SetMaxIdleConns")
 
