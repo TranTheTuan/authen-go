@@ -113,6 +113,7 @@ func initConfiguration() {
 	_ = viper.BindPFlag(MySQLPort, rootCmd.PersistentFlags().Lookup(MySQLPort))
 	_ = viper.BindPFlag(MySQLCharset, rootCmd.PersistentFlags().Lookup(MySQLCharset))
 	_ = viper.BindPFlag(MySQLLoc, rootCmd.PersistentFlags().Lookup(MySQLLoc))
+	_ = viper.BindPFlag(MySQLTLS, rootCmd.PersistentFlags().Lookup(MySQLTLS))
 	_ = viper.BindPFlag(MySQLMaxOpenConnections, rootCmd.PersistentFlags().Lookup(MySQLMaxOpenConnections))
 	_ = viper.BindPFlag(MySQLMaxIdleConnections, rootCmd.PersistentFlags().Lookup(MySQLMaxIdleConnections))
 
